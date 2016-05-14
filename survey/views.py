@@ -15,7 +15,7 @@ def claim_new(request):
         form = PostForm(request.POST)
         if form.is_valid():
             claim = form.save(commit=False)
-#            claim.author = request.user
+            claim.author = poster
             claim.yeas = 0
             claim.nays = 0
             claim.upvotes = 1
