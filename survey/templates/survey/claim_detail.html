@@ -1,0 +1,19 @@
+{% extends 'survey/base.html' %}
+
+{% block content %}
+<div>
+	<h1>{{ claim.text }}</h1>
+	<p>{{ claim.yeas }} people agree.</p>
+	<p>{{ claim.nays }} people disagree.</p>
+	<p>{{ claim.upvotes }} people think it's a good question.</p>
+	<p>{{ claim.downvotes }} people think it's a bad question.</p>
+</div>	
+
+<div>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+</div>
+
+{% endblock %}
