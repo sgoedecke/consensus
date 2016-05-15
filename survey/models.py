@@ -6,7 +6,7 @@ from django.utils import timezone
 # Create your models here.
 
 class Claim(models.Model):
-#	author = models.ForeignKey('auth.User')
+	author = models.ForeignKey('auth.User', null=True) #allows for no author
 	text = models.CharField(max_length=600)
 	created_date = models.DateTimeField(default=timezone.now)
 	yeas = models.IntegerField()

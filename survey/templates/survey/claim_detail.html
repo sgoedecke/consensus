@@ -10,9 +10,12 @@
 </div>	
 
 <div>
-    <form method="POST" class="post-form">{% csrf_token %}
+    <form method="GET" class="post-form">{% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
+        <button type="submit" class="btn" value="Click" name="upvote">This is a good question.</button>
+        <button type="submit" class="btn" value="Click" name="downvote">This is a bad question.</button>
+        <button type="submit" class="btn" value="Click" name="yea">I agree!</button>
+        <button type="submit" class="btn" value="Click" name="nay">I disagree!</button>
     </form>
 </div>
 

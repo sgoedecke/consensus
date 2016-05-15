@@ -2,8 +2,8 @@
 
 {% block content %}
 {% for claim in claims %}
-    <div>
-       <h1><a href="{% url 'claim_detail' pk=claim.pk %}">{{ claim.text }} ({{ claim.yeas }}/{{ claim.nays }})</a></h1>
+    <div class ="claim">
+       <p><a href="{% url 'claim_detail' pk=claim.pk %}">({{claim.upvotes}}) | {{ claim.text }} ({{ claim.yeas }}/{{ claim.nays }})</a></p>
     </div>
 {% endfor %}
 {% endblock %}
