@@ -12,10 +12,18 @@
 <div>
     <form method="GET" class="post-form">{% csrf_token %}
         {{ form.as_p }}
+        {% if user not in claim.voters.all %}
         <button type="submit" class="btn" value="Click" name="upvote">This is a good question.</button>
         <button type="submit" class="btn" value="Click" name="downvote">This is a bad question.</button>
+        {% else %}
+        <p>You have judged the question.</p>
+        {% endif %}
+        {% if user not in claim.answerers.all %}
         <button type="submit" class="btn" value="Click" name="yea">I agree!</button>
         <button type="submit" class="btn" value="Click" name="nay">I disagree!</button>
+        {% else %}
+        <p>You have answered the question.</p>
+        {% endif %}
     </form>
 </div>
 

@@ -2,8 +2,12 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
+
 
 # Create your models here.
+
+
 
 class Claim(models.Model):
 	author = models.ForeignKey('auth.User', null=True) #allows for no author
@@ -14,8 +18,12 @@ class Claim(models.Model):
 	upvotes = models.IntegerField()
 	downvotes = models.IntegerField()
 	
+	voters = models.ManyToManyField(User, related_name='+')
+	answerers = models.ManyToManyField(User, related_name='+')
+	
 	def publish(self):
 		self.save()
 		
 	def __str__(self):
 		return self.text
+		
