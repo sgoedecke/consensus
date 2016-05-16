@@ -6,12 +6,15 @@ from django import forms
 from .models import Claim
 from .forms import PostForm
 
-def claim_list(request):
-	claims = Claim.objects.order_by('-upvotes')
+def claim_list(request, type=' '):
+	if not type == ' ':
+		claims = Claim.objects.filter(type=type).order_by('-upvotes')
+	else:
+		claims = Claim.objects.order_by('-upvotes')
 	return render(request, 'survey/claim_list.html', {'claims': claims})
 	
 @login_required
-def claim_detail(request, pk):
+def claim_detail(request, pk, type=' '):
 	claim = get_object_or_404(Claim, pk=pk)
 	#check for button presses
 	if request.user not in claim.voters.all():
@@ -33,28 +36,29 @@ def claim_detail(request, pk):
 	return render(request, 'survey/claim_detail.html', {'claim': claim})
 
 @login_required
-def claim_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            claim = form.save(commit=False)
-            if request.user.is_authenticated():
-            	claim.author = request.user
-            else:
-            	claim.author = None
-            claim.yeas = 0
-            claim.nays = 0
-            claim.upvotes = 1
-            claim.downvotes = 0
-
-            claim.save()
-            claim.voters.add(request.user)
-            claim.save()
-            return redirect('claim_detail', pk=claim.pk)
-    else:
-        form = PostForm()
-    return render(request, 'survey/claim_new.html', {'form': form})
-    
+def claim_new(request, type = ' '):
+	if request.method == "POST":
+		form = PostForm(request.POST)
+		if form.is_valid():
+			claim = form.save(commit=False)
+			if request.user.is_authenticated():
+				claim.author = request.user
+			else:
+				claim.author = None
+			claim.yeas = 0
+			claim.nays = 0
+			claim.upvotes = 1
+			claim.downvotes = 0
+			if not type == ' ':
+				claim.type = type
+			claim.save()
+			claim.voters.add(request.user)
+			claim.save()
+			return redirect('claim_detail', pk=claim.pk)
+	else:
+		form = PostForm()
+	return render(request, 'survey/claim_new.html', {'form': form})
+	
 def register(request):
 	if request.method == "POST":
 		form = UserCreationForm(request.POST)

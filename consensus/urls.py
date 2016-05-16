@@ -23,4 +23,5 @@ urlpatterns = [
 	url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 	url(r'^accounts/register/$', views.register, name='register'),
     url(r'', include('survey.urls')),	#this just tells it to look in the survey app's urls.py
+    url(r'^philosophy/', include('survey.urls'), {'type': 'philosophy'}),	#this just tells it to look in the survey app's urls.py
 ]

@@ -10,6 +10,13 @@
     text-decoration: none;
 }
 
+.page-header h2, .page-header h2 a, .page-header h2 a:visited, .page-header h2 a:active {
+    color: #ffffff;
+    font-size: 16pt;
+    text-decoration: none;
+    text-align: left;
+}
+
 .content {
     margin-left: 40px;
 }
@@ -36,6 +43,8 @@ h1, h2, h3, h4 {
     font-size: 13pt;
     margin-right: 35px;
 }
+
+
 
 .claim {
     color: #000000;
