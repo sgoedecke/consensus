@@ -46,6 +46,7 @@ def claim_new(request):
             claim.nays = 0
             claim.upvotes = 1
             claim.downvotes = 0
+            claim.voters.add(request.user)
             claim.save()
             return redirect('claim_detail', pk=claim.pk)
     else:
