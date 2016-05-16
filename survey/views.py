@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
+from django import forms
 from .models import Claim
 from .forms import PostForm
 
@@ -48,3 +51,15 @@ def claim_new(request):
     else:
         form = PostForm()
     return render(request, 'survey/claim_new.html', {'form': form})
+    
+def register(request):
+	if request.method == "POST":
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			new_user = form.save()
+			user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))	#I pulled this off the internet, no idea why you need cleaned-data or "password1"
+			login(request, user)
+			return redirect('claim_list')
+	else:
+		form = UserCreationForm()
+	return render(request, "registration/register.html", {'form': form,})

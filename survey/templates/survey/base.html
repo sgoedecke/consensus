@@ -15,6 +15,7 @@
 		<p class="top-menu">Logged in as '{{ user.username }}' </p> 
 		{% else %}
 		<a href="{% url 'django.contrib.auth.views.login' %}" class="top-menu">Login</a>
+		<a href="{% url 'register' %}" class="top-menu">Register</a>
 		{% endif %}
         <h1><a href="/">Consensus Tracker</a></h1>
     </div>
