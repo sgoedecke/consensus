@@ -20,36 +20,59 @@ def claim_list(request, vote = ' ', pk=0, type=False):
 
 	#handle weird setting of type to '1' so urls recognises it
 	
-	if type == '1':
-		type = True
+	if request.user.is_authenticated():
+		if type == '1':
+			viewing_category = "philosophy"
+			type = True
+		elif type == '0':
+			viewing_category = " "
+		else:
+			viewing_category = request.user.profile.viewing
+	
+		if request.user.profile.viewing != viewing_category:
+			request.user.profile.switch()
+	else:
+		if type == '1':
+			viewing_category = "philosophy"
+			type = True
+		else:
+			viewing_category = " "
+
 
 	#handle votes if needed
-	
-	if vote != ' ':
-		claim = get_object_or_404(Claim,pk=pk)
-		type = claim.type
-		if request.user not in claim.voters.all():
-			if vote == 'upvote':
-				claim.upvotes = claim.upvotes + 1 
-				claim.voters.add(request.user)
-			if vote == 'downvote':
-				claim.downvotes = claim.downvotes + 1 
-				claim.voters.add(request.user)
-		if request.user not in claim.answerers.all():		
-			if vote == 'yea':
-				claim.yeas = claim.yeas + 1 
-				claim.answerers.add(request.user)
-			if vote == 'nay':
-				claim.nays = claim.nays + 1 
-				claim.answerers.add(request.user)
-		claim.save()
+	if request.user.is_authenticated():
+		if vote != ' ':
+			claim = get_object_or_404(Claim,pk=pk)
+			type = claim.type
+			if request.user not in claim.voters.all():
+				if vote == 'upvote':
+					claim.upvotes = claim.upvotes + 1 
+					claim.voters.add(request.user)
+				if vote == 'downvote':
+					claim.downvotes = claim.downvotes + 1 
+					claim.voters.add(request.user)
+			if request.user not in claim.answerers.all():		
+				if vote == 'yea':
+					claim.yeas = claim.yeas + 1 
+					claim.answerers.add(request.user)
+				if vote == 'nay':
+					claim.nays = claim.nays + 1 
+					claim.answerers.add(request.user)
+			claim.save()
+
 				
 	#display claim list
-	if type == True:
-		print "******** GETTING PHIL CLAIMS ****"
-		claims = Claim.objects.filter(type=True).order_by('-upvotes')
+	if request.user.is_authenticated():
+
+		user_profile = request.user.profile
+		user_viewing = user_profile.viewing
 	else:
-		claims = Claim.objects.order_by('-upvotes')
+		user_viewing = viewing_category
+	if user_viewing == "philosophy":
+		print "******** GETTING PHIL CLAIMS ****"
+		claims = Claim.objects.filter(type=True).order_by('-score')
+	else:
+		claims = Claim.objects.order_by('-score')
 	print type
 	return render(request, 'survey/claim_list.html', {'claims': claims})
 	
@@ -108,3 +131,6 @@ def register(request):
 	else:
 		form = UserCreationForm()
 	return render(request, "registration/register.html", {'form': form,})
+
+def about(request):
+	return render(request, "survey/about.html")

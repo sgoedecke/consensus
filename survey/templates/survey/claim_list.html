@@ -3,23 +3,30 @@
 {% block content %}
 
 {% for claim in claims %}
-  	<div class ="claim">
-       <p><a href="{% url 'claim_detail' pk=claim.pk %}" class="claim">{{ claim.text }} ({{ claim.yeas }} agree, {{ claim.nays }} disagree.)</a></p>
-    
+  	<div class ="claim"> <p>
+       <a href="{% url 'claim_detail' pk=claim.pk %}" class="claim">{{ claim.text }}</a> <span class = "vote_count"> ({{ claim.yeas }} agree, {{ claim.nays }} disagree.)</span>	
+    	{% if user.is_authenticated %}
+    	
+    	{% if user not in claim.answerers.all %}
+        
+        <a href="{% url 'claim_list' pk=claim.pk vote="nay"  %}" class="vote">I disagree!</a> 
+        <a href="{% url 'claim_list' pk=claim.pk vote="yea"  %}" class="vote">I agree!</a>
+        
+        {% else %}
+        <!-- <p>You have answered the question.</p> -->
+        {% endif %}
+    	
         {% if user not in claim.voters.all %}
-        <p><a href="{% url 'claim_list' pk=claim.pk vote="upvote"  %}" class="claim">This is a good question!</a></p>
-    	<p><a href="{% url 'claim_list' pk=claim.pk vote="downvote"  %}" class="claim">This is a bad question!</a></p>
+        <!-- <p><a href="{% url 'claim_list' pk=claim.pk vote="upvote"  %}" class="claim">Interesting claim!</a></p> -->
+    	<a href="{% url 'claim_list' pk=claim.pk vote="downvote"  %}" class="report">Report</a>
         {% else %}
-        <p>You have judged the question.</p>
+        <!-- <p>You have judged the question.</p> -->
         {% endif %}
-        {% if user not in claim.answerers.all %}
         
-        <p><a href="{% url 'claim_list' pk=claim.pk vote="nay"  %}" class="claim">I disagree!</a></p>  
-        <p><a href="{% url 'claim_list' pk=claim.pk vote="yea"  %}" class="claim">I agree!</a></p>
+
         
-        {% else %}
-        <p>You have answered the question.</p>
-        {% endif %}
+       	{% endif %}
+       	</p>
        <hr>
     </div>
 

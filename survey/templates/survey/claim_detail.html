@@ -5,27 +5,27 @@
 	<h1>{{ claim.text }}</h1>
 	<p>{{ claim.yeas }} people agree.</p>
 	<p>{{ claim.nays }} people disagree.</p>
-	<p>{{ claim.upvotes }} people think it's a good question.</p>
-	<p>{{ claim.downvotes }} people think it's a bad question.</p>
-	<p>{{ claim.type }} This is the claim's type.</p>
+	<p>{{ claim.upvotes }} people think it's a good claim to consider.</p>
+	<p>{{ claim.downvotes }} people think it's a bad claim to consider.</p>
+	<p>{% if claim.type %}This is a claim about philosophy. {% endif %}</p>
 </div>	
-
+    	{% if user.is_authenticated %}
 <div>
     <form method="GET" class="post-form">{% csrf_token %}
         {{ form.as_p }}
         {% if user not in claim.voters.all %}
-        <button type="submit" class="btn" value="Click" name="upvote">This is a good question.</button>
-        <button type="submit" class="btn" value="Click" name="downvote">This is a bad question.</button>
+        <!-- <button type="submit" class="btn" value="Click" name="upvote">Interesting claim.</button> -->
+        <button type="submit" class="btn" value="Click" name="downvote">Report this claim.</button>
         {% else %}
-        <p>You have judged the question.</p>
+        You have judged the question.
         {% endif %}
         {% if user not in claim.answerers.all %}
         <button type="submit" class="btn" value="Click" name="yea">I agree!</button>
         <button type="submit" class="btn" value="Click" name="nay">I disagree!</button>
         {% else %}
-        <p>You have answered the question.</p>
+        You have answered the question.
         {% endif %}
     </form>
 </div>
-
+	{% endif %}
 {% endblock %}
