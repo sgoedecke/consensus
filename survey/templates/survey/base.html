@@ -2,8 +2,8 @@
 <html>
 <head>
 	<title>Consensus Tracker</title>
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<dlink rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<dlink rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="{% static 'css/survey.css' %}">
 </head>
@@ -17,8 +17,8 @@
 		<a href="{% url 'django.contrib.auth.views.login' %}" class="top-menu">Login</a>
 		<a href="{% url 'register' %}" class="top-menu">Register</a>
 		{% endif %}
-        <h1><a href="/">Consensus Tracker</a></h1>
-       	<h2><a href="/philosophy/">Philosophy</a></h2>
+        <h1><a href="{% url 'claim_list' type=0 %}">Consensus Tracker</a></h1>
+       	<h2><a href="{% url 'claim_list' type=1 %}">Philosophy</a></h2>
     </div>
     <div class="content container">
         <div class="row">

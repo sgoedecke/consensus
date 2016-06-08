@@ -17,7 +17,7 @@ class Claim(models.Model):
 	nays = models.IntegerField()
 	upvotes = models.IntegerField()
 	downvotes = models.IntegerField()
-	type = models.CharField(max_length=100)	#the type of claim, eg. philosophy - default is ' '
+	type = models.BooleanField("Is this philosophy?")	#Yes for phil, no for empty
 	
 	voters = models.ManyToManyField(User, related_name='+')
 	answerers = models.ManyToManyField(User, related_name='+')

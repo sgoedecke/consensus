@@ -6,15 +6,55 @@ from django import forms
 from .models import Claim
 from .forms import PostForm
 
-def claim_list(request, type=' '):
-	if not type == ' ':
-		claims = Claim.objects.filter(type=type).order_by('-upvotes')
+@login_required
+def claim_vote(request, pk, type = ' '):
+	claim = get_object_or_404(Claim, pk=pk)
+	claim.upvotes = claim.upvotes + 1 
+	claim.voters.add(request.user)
+
+	claim.save()
+	return render(request, '/survey/claim_list.html') #REDIRECTS TO /phil/
+
+
+def claim_list(request, vote = ' ', pk=0, type=False):
+
+	#handle weird setting of type to '1' so urls recognises it
+	
+	if type == '1':
+		type = True
+
+	#handle votes if needed
+	
+	if vote != ' ':
+		claim = get_object_or_404(Claim,pk=pk)
+		type = claim.type
+		if request.user not in claim.voters.all():
+			if vote == 'upvote':
+				claim.upvotes = claim.upvotes + 1 
+				claim.voters.add(request.user)
+			if vote == 'downvote':
+				claim.downvotes = claim.downvotes + 1 
+				claim.voters.add(request.user)
+		if request.user not in claim.answerers.all():		
+			if vote == 'yea':
+				claim.yeas = claim.yeas + 1 
+				claim.answerers.add(request.user)
+			if vote == 'nay':
+				claim.nays = claim.nays + 1 
+				claim.answerers.add(request.user)
+		claim.save()
+				
+	#display claim list
+	if type == True:
+		print "******** GETTING PHIL CLAIMS ****"
+		claims = Claim.objects.filter(type=True).order_by('-upvotes')
 	else:
 		claims = Claim.objects.order_by('-upvotes')
+	print type
 	return render(request, 'survey/claim_list.html', {'claims': claims})
 	
 @login_required
-def claim_detail(request, pk, type=' '):
+def claim_detail(request, pk, type=False):
 	claim = get_object_or_404(Claim, pk=pk)
 	#check for button presses
 	if request.user not in claim.voters.all():
@@ -31,12 +71,11 @@ def claim_detail(request, pk, type=' '):
 		if request.GET.get("nay"):
 			claim.nays = claim.nays + 1 
 			claim.answerers.add(request.user)
-		
 	claim.save()
 	return render(request, 'survey/claim_detail.html', {'claim': claim})
 
 @login_required
-def claim_new(request, type = ' '):
+def claim_new(request):
 	if request.method == "POST":
 		form = PostForm(request.POST)
 		if form.is_valid():
@@ -49,8 +88,7 @@ def claim_new(request, type = ' '):
 			claim.nays = 0
 			claim.upvotes = 1
 			claim.downvotes = 0
-			if not type == ' ':
-				claim.type = type
+
 			claim.save()
 			claim.voters.add(request.user)
 			claim.save()
