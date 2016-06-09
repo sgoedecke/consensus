@@ -12,7 +12,7 @@
 		<span class="top-menu">Logged in as '{{ user.username }}' </span> 
 		{% else %}
 		<a href="{% url 'django.contrib.auth.views.login' %}" class="top-menu">Login</a>
-		<a href="{% url 'register' %}" class="top-menu">Register</a>
+		<a href="{% url 'register' %}" class="top-menu">Register to vote on claims!</a>
 		{% endif %}
         <h1><a href="{% url 'claim_list' type=0 %}">Consensus Tracker</a></h1>
         
