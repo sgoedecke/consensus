@@ -33,7 +33,7 @@ class Claim(models.Model):
 	upvotes = models.IntegerField()
 	downvotes = models.IntegerField()
 	score = models.IntegerField(default=0)
-	type = models.BooleanField("Is this philosophy?")	#Yes for phil, no for empty
+	type = models.BooleanField("Is this philosophy?", default=True)	#Yes for phil, no for empty  SET as true for BP people
 	
 	voters = models.ManyToManyField(User, related_name='+')
 	answerers = models.ManyToManyField(User, related_name='+')

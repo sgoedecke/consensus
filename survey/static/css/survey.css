@@ -63,6 +63,14 @@ h1, h2, h3, h4 {
     margin-bottom: 7px;
 }
 
+.vote-text {
+    color: #003380;
+}
+
+.report-text {
+	color: #800000 !important;
+}
+
 .vote {
     color: #003380;
     text-align: left;
